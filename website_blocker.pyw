@@ -1,18 +1,18 @@
 import time
 from datetime import datetime as dt
 
-hosts_temp = "D:\Github\Python Projects\Website Blocker\Website-Blocker\hosts"
 hosts_path = "C:\Windows\System32\drivers\etc\hosts"
 redirect = "127.0.0.1"
-website_list = ["www.amazon.com", "daraz.com.bd"]
+website_list = ["www.amazon.com", "www.daraz.com.bd"]
+restricted_hour_start = 8
+restricted_hour_end = 23
+restriction_starts = dt(dt.now().year, dt.now().month, dt.now().day, restricted_hour_start)
+restriction_ends = dt(dt.now().year, dt.now().month, dt.now().day, restricted_hour_end)
 
 while True:
-    print(1)
-    newfile = ""
-    if dt(dt.now().year, dt.now().month, dt.now().day, 8) < dt.now() < dt(dt.now().year, dt.now().month, dt.now().day,
-                                                                          10):
+    if restriction_starts < dt.now() < restriction_ends:
         print("Working hours...")
-        with open(hosts_temp, 'r+') as file:
+        with open(hosts_path, 'r+') as file:
             content = file.read()
             for website in website_list:
                 if website not in content:
@@ -20,9 +20,9 @@ while True:
     else:
         c = 0
         print("Free hours...")
-        with open(hosts_temp, "r") as file:
+        with open(hosts_path, "r") as file:
             content = file.readlines()
-        with open(hosts_temp, "w") as file:
+        with open(hosts_path, "w") as file:
             for line in content:
                 for website in website_list:
                     if website in line:
